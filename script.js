@@ -236,13 +236,80 @@ async function merge(l, m, r) {
     }
 }
 
+async function heapSort() {
+  let n = array.length;
+  const sortedIndices = [];
+
+  // Constrói o heap máximo (reorganiza o array)
+  for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
+    await heapify(n, i);
+  }
+
+  // Extrai um por um os elementos do heap
+  for (let i = n - 1; i > 0; i--) {
+    updateStatus(`Trocando ${array[0]} e ${array[i]}`);
+    renderArray([], [0, i], sortedIndices);
+    await sleep(600);
+
+    [array[0], array[i]] = [array[i], array[0]];
+    sortedIndices.push(i);
+
+    renderArray([], [], sortedIndices);
+    await sleep(350);
+
+    await heapify(i, 0);
+  }
+
+  sortedIndices.push(0); // último elemento ordenado
+  renderArray([], [], [...Array(array.length).keys()]);
+  updateStatus('Array Ordenado!');
+}
+
+// Função para transformar um subárvore em heap, dado um nó raiz i e tamanho n
+async function heapify(n, i) {
+  let maior = i;            // Inicializa o maior como raiz
+  let esquerda = 2 * i + 1; // filho esquerdo
+  let direita = 2 * i + 2;  // filho direito
+
+  if (esquerda < n) {
+    updateStatus(`Comparando ${array[esquerda]} e ${array[maior]}`);
+    renderArray([esquerda, maior]);
+    await sleep(350);
+    if (array[esquerda] > array[maior]) {
+      maior = esquerda;
+    }
+  }
+
+  if (direita < n) {
+    updateStatus(`Comparando ${array[direita]} e ${array[maior]}`);
+    renderArray([direita, maior]);
+    await sleep(350);
+    if (array[direita] > array[maior]) {
+      maior = direita;
+    }
+  }
+
+  if (maior !== i) {
+    updateStatus(`Trocando ${array[i]} e ${array[maior]}`);
+    renderArray([], [i, maior]);
+    await sleep(600);
+
+    [array[i], array[maior]] = [array[maior], array[i]];
+    renderArray([i, maior]);
+    await sleep(350);
+
+    await heapify(n, maior);
+  }
+}
+
 
 const algorithmSummaries = {
   bubble: '<b>Bubble Sort</b>: compara pares de elementos adjacentes e os troca se estiverem na ordem errada. O processo se repete até que o array esteja ordenado.<br><b>Uso:</b> Didático, para ensino e listas pequenas.<br><b>Curiosidade:</b> É um dos algoritmos mais simples, mas raramente usado na prática devido à sua baixa eficiência.',
   selection: '<b>Selection Sort</b>: percorre o array procurando o menor elemento e o coloca na primeira posição, depois repete para as próximas posições.<br><b>Uso:</b> Didático, fácil de implementar.<br><b>Curiosidade:</b> Faz o menor número possível de trocas entre os algoritmos de ordenação quadrática.',
   insertion: '<b>Insertion Sort</b>: constrói o array ordenado um elemento por vez, inserindo cada novo elemento na posição correta.<br><b>Uso:</b> Pequenas listas, arrays quase ordenados.<br><b>Curiosidade:</b> É o algoritmo usado por humanos ao ordenar cartas de baralho.',
   quicksort: '<b>Quick Sort</b>: usa a estratégia de "dividir para conquistar". Escolhe um elemento como pivô e particiona o array, de modo que elementos menores que o pivô fiquem antes e maiores depois.<br><b>Uso:</b> Muito eficiente e amplamente utilizado na prática.<br><b>Curiosidade:</b> Seu desempenho depende muito da escolha do pivô.',
-  mergesort: '<b>Merge Sort</b>: também "divide para conquistar". Divide o array ao meio, ordena cada metade recursivamente e depois mescla as duas metades ordenadas.<br><b>Uso:</b> Ótimo para grandes volumes de dados e quando a estabilidade da ordenação é importante.<br><b>Curiosidade:</b> Garante o tempo de O(n*log n), mas requer memória extra.'
+  mergesort: '<b>Merge Sort</b>: também "divide para conquistar". Divide o array ao meio, ordena cada metade recursivamente e depois mescla as duas metades ordenadas.<br><b>Uso:</b> Ótimo para grandes volumes de dados e quando a estabilidade da ordenação é importante.<br><b>Curiosidade:</b> Garante o tempo de O(n*log n), mas requer memória extra.',
+  heapsort: '<b>Heap Sort</b>: constrói uma estrutura de heap (árvore binária) e extrai repetidamente o maior elemento, colocando-o no final do array.<br><b>Uso:</b> Muito eficiente em termos de complexidade O(n log n) e não requer memória extra.<br><b>Curiosidade:</b> É usado em sistemas embarcados onde a memória é limitada.'
 };
 
 function updateAlgorithmSummary() {
@@ -266,6 +333,8 @@ sortBtn.addEventListener('click', async () => {
   else if (algorithm === 'insertion') await insertionSort();
   else if (algorithm === 'quicksort') await quickSort();
   else if (algorithm === 'mergesort') await mergeSort();
+  else if (algorithm === 'heapsort') await heapSort();
+
 
   sortBtn.disabled = false;
   generateBtn.disabled = false;
