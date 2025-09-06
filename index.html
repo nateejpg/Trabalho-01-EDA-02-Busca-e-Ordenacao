@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Ordenação</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Simulador de Ordenação</h1>
+  </header>
+
+  <main>
+    <div class="controls">
+      <label for="algorithm">Escolha o algoritmo:</label>
+        <select id="algorithm">
+        <option value="bubble">Bubble Sort</option>
+        <option value="selection">Selection Sort</option>
+        <option value="insertion">Insertion Sort</option>
+        </select>
+      <label for="size">Tamanho do array:</label>
+      <input type="number" id="size" value="10" min="5" max="50">
+
+      <button id="generate">Gerar Array</button>
+      <label for="manual-input">Ou insira os valores (separados por vírgula):</label>
+      <input type="text" id="manual-input" placeholder="Ex: 5, 2, 9, 1, 7">
+      <button id="set-array">Usar Valores</button>
+      <button id="sort">Ordenar</button>
+    </div>
+
+    <div id="algorithm-status" class="algorithm-status"></div>
+    <div id="array-container"></div>
+    <div id="algorithm-summary" class="algorithm-summary"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
