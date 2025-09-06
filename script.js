@@ -33,25 +33,28 @@ function setArrayFromInput() {
   updateStatus('');
 }
 
-function renderArray(activeIndices = [], swapIndices = [], sortedIndices = []) {
-  arrayContainer.innerHTML = '';
-  array.forEach((value, index) => {
-    const bar = document.createElement('div');
-    bar.classList.add('bar');
-    if (sortedIndices.includes(index)) {
-        bar.classList.add('sorted');
-    }
-    if (swapIndices.includes(index)) {
-        bar.classList.add('swap');
-    }
-    else if (activeIndices.includes(index)) {
-        bar.classList.add('active');
-    }
-    bar.style.height = `${value * 3}px`;
-    bar.textContent = value;
-    arrayContainer.appendChild(bar);
-  });
+function renderArray(activeIndices = [], swapIndices = [], sortedIndices = [], pivotIndex = -1) {
+    arrayContainer.innerHTML = '';
+    array.forEach((value, index) => {
+        const bar = document.createElement('div');
+        bar.classList.add('bar');
+        if (sortedIndices.includes(index)) {
+            bar.classList.add('sorted');
+        }
+        if (index === pivotIndex) {
+            bar.classList.add('pivot');
+        }
+        if (swapIndices.includes(index)) {
+            bar.classList.add('swap');
+        } else if (activeIndices.includes(index)) {
+            bar.classList.add('active');
+        }
+        bar.style.height = `${value * 3}px`;
+        bar.textContent = value;
+        arrayContainer.appendChild(bar);
+    });
 }
+
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -134,11 +137,112 @@ async function insertionSort() {
   updateStatus('Array Ordenado!');
 }
 
+async function quickSort(low = 0, high = array.length - 1) {
+    if (low < high) {
+        let pivotIndex = await partition(low, high);
+        await quickSort(low, pivotIndex - 1);
+        await quickSort(pivotIndex + 1, high);
+    }
+    if (low === 0 && high === array.length - 1) {
+        renderArray([], [], [...Array(array.length).keys()]);
+        updateStatus('Array Ordenado!');
+    }
+}
+
+async function partition(low, high) {
+    let pivot = array[high];
+    let i = low - 1;
+    updateStatus(`Pivô escolhido: ${pivot}`);
+    renderArray([], [], [], high);
+    await sleep(600);
+
+    for (let j = low; j < high; j++) {
+        updateStatus(`Comparando ${array[j]} com o pivô ${pivot}`);
+        renderArray([j], [], [], high);
+        await sleep(350);
+        if (array[j] < pivot) {
+            i++;
+            updateStatus(`Trocando ${array[i]} e ${array[j]}`);
+            renderArray([], [i, j], [], high);
+            await sleep(600);
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+    updateStatus(`Trocando pivô ${array[high]} com ${array[i + 1]}`);
+    renderArray([], [i + 1, high]);
+    await sleep(600);
+    [array[i + 1], array[high]] = [array[high], array[i + 1]];
+    return i + 1;
+}
+
+async function mergeSort(l = 0, r = array.length - 1) {
+    if (l >= r) {
+        return;
+    }
+    const m = l + Math.floor((r - l) / 2);
+    await mergeSort(l, m);
+    await mergeSort(m + 1, r);
+    await merge(l, m, r);
+
+    if (l === 0 && r === array.length - 1) {
+        renderArray([], [], [...Array(array.length).keys()]);
+        updateStatus('Array Ordenado!');
+    }
+}
+
+async function merge(l, m, r) {
+    let n1 = m - l + 1;
+    let n2 = r - m;
+    let L = new Array(n1);
+    let R = new Array(n2);
+
+    for (let i = 0; i < n1; i++) L[i] = array[l + i];
+    for (let j = 0; j < n2; j++) R[j] = array[m + 1 + j];
+
+    let i = 0;
+    let j = 0;
+    let k = l;
+
+    while (i < n1 && j < n2) {
+        updateStatus(`Mesclando subarrays: comparando ${L[i]} e ${R[j]}`);
+        renderArray([l + i, m + 1 + j]);
+        await sleep(350);
+        if (L[i] <= R[j]) {
+            array[k] = L[i];
+            i++;
+        } else {
+            array[k] = R[j];
+            j++;
+        }
+        renderArray([], [k]);
+        await sleep(350);
+        k++;
+    }
+
+    while (i < n1) {
+        array[k] = L[i];
+        renderArray([], [k]);
+        await sleep(350);
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        array[k] = R[j];
+        renderArray([], [k]);
+        await sleep(350);
+        j++;
+        k++;
+    }
+}
+
 
 const algorithmSummaries = {
   bubble: '<b>Bubble Sort</b>: compara pares de elementos adjacentes e os troca se estiverem na ordem errada. O processo se repete até que o array esteja ordenado.<br><b>Uso:</b> Didático, para ensino e listas pequenas.<br><b>Curiosidade:</b> É um dos algoritmos mais simples, mas raramente usado na prática devido à sua baixa eficiência.',
   selection: '<b>Selection Sort</b>: percorre o array procurando o menor elemento e o coloca na primeira posição, depois repete para as próximas posições.<br><b>Uso:</b> Didático, fácil de implementar.<br><b>Curiosidade:</b> Faz o menor número possível de trocas entre os algoritmos de ordenação quadrática.',
-  insertion: '<b>Insertion Sort</b>: constrói o array ordenado um elemento por vez, inserindo cada novo elemento na posição correta.<br><b>Uso:</b> Pequenas listas, arrays quase ordenados.<br><b>Curiosidade:</b> É o algoritmo usado por humanos ao ordenar cartas de baralho.'
+  insertion: '<b>Insertion Sort</b>: constrói o array ordenado um elemento por vez, inserindo cada novo elemento na posição correta.<br><b>Uso:</b> Pequenas listas, arrays quase ordenados.<br><b>Curiosidade:</b> É o algoritmo usado por humanos ao ordenar cartas de baralho.',
+  quicksort: '<b>Quick Sort</b>: usa a estratégia de "dividir para conquistar". Escolhe um elemento como pivô e particiona o array, de modo que elementos menores que o pivô fiquem antes e maiores depois.<br><b>Uso:</b> Muito eficiente e amplamente utilizado na prática.<br><b>Curiosidade:</b> Seu desempenho depende muito da escolha do pivô.',
+  mergesort: '<b>Merge Sort</b>: também "divide para conquistar". Divide o array ao meio, ordena cada metade recursivamente e depois mescla as duas metades ordenadas.<br><b>Uso:</b> Ótimo para grandes volumes de dados e quando a estabilidade da ordenação é importante.<br><b>Curiosidade:</b> Garante o tempo de O(n*log n), mas requer memória extra.'
 };
 
 function updateAlgorithmSummary() {
@@ -160,6 +264,8 @@ sortBtn.addEventListener('click', async () => {
   if (algorithm === 'bubble') await bubbleSort();
   else if (algorithm === 'selection') await selectionSort();
   else if (algorithm === 'insertion') await insertionSort();
+  else if (algorithm === 'quicksort') await quickSort();
+  else if (algorithm === 'mergesort') await mergeSort();
 
   sortBtn.disabled = false;
   generateBtn.disabled = false;
