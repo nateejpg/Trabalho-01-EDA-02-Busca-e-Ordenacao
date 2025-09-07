@@ -40,7 +40,11 @@ Aqui devem estar descritas as dependências do projeto (versões de linguagens e
 Neste tópico você poderá observar as capturas de tela do funcionamento de cada algoritmo de ordenação do ponto de vista do usuário.  
  - As imagens devem ser salvas no repositório.
  - Imagens salvas em domínios eternos tendem a ficar indisponíveis e devem ser evitadas.   
- - 
+
+### Bubble Sort 
+
+<img src="./CAPTURAS_DE_TELA_TRABALHO1_EDA2/Captura1.png" alt="Minha imagem" width="300"/>
+
 ## Conclusões
 Aqui você diz se o algoritmo utilizado foi útil, se tem limitações, etc.
 ## Referências
