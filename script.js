@@ -302,6 +302,61 @@ async function heapify(n, i) {
   }
 }
 
+async function bucketSort(bucketSize = 5) {
+    if (array.length === 0) return array;
+
+    const minValue = Math.min(...array);
+    const maxValue = Math.max(...array);
+
+    const bucketCount = Math.floor((maxValue - minValue) / bucketSize) + 1;
+    let buckets = Array.from({ length: bucketCount }, () => []);
+
+    updateStatus(`Distribuindo elementos em ${bucketCount} buckets...`);
+    await sleep(600);
+
+    // Distribui elementos nos buckets
+    for (let i = 0; i < array.length; i++) {
+        let bucketIndex = Math.floor((array[i] - minValue) / bucketSize);
+        buckets[bucketIndex].push(array[i]);
+        renderArray([i]); // destaca o elemento sendo distribuído
+        await sleep(300);
+    }
+
+    updateStatus(`Ordenando cada bucket individualmente...`);
+    await sleep(600);
+
+    // Ordena cada bucket
+    array.length = 0;
+    for (let i = 0; i < buckets.length; i++) {
+        if (buckets[i].length > 0) {
+            // Usando insertion sort para manter didático
+            for (let j = 1; j < buckets[i].length; j++) {
+                let key = buckets[i][j];
+                let k = j - 1;
+                while (k >= 0 && buckets[i][k] > key) {
+                    buckets[i][k + 1] = buckets[i][k];
+                    k--;
+                }
+                buckets[i][k + 1] = key;
+            }
+
+            updateStatus(`Bucket ${i} ordenado: [${buckets[i].join(', ')}]`);
+            await sleep(600);
+        }
+
+        // Concatena no array final
+        for (let j = 0; j < buckets[i].length; j++) {
+            array.push(buckets[i][j]);
+            renderArray([], [array.length - 1]); // destaca a inserção no array final
+            await sleep(300);
+        }
+    }
+
+    renderArray([], [], [...Array(array.length).keys()]);
+    updateStatus('Array Ordenado!');
+}
+
+
 
 const algorithmSummaries = {
   bubble: '<b>Bubble Sort</b>: compara pares de elementos adjacentes e os troca se estiverem na ordem errada. O processo se repete até que o array esteja ordenado.<br><b>Uso:</b> Didático, para ensino e listas pequenas.<br><b>Curiosidade:</b> É um dos algoritmos mais simples, mas raramente usado na prática devido à sua baixa eficiência.',
@@ -309,7 +364,8 @@ const algorithmSummaries = {
   insertion: '<b>Insertion Sort</b>: constrói o array ordenado um elemento por vez, inserindo cada novo elemento na posição correta.<br><b>Uso:</b> Pequenas listas, arrays quase ordenados.<br><b>Curiosidade:</b> É o algoritmo usado por humanos ao ordenar cartas de baralho.',
   quicksort: '<b>Quick Sort</b>: usa a estratégia de "dividir para conquistar". Escolhe um elemento como pivô e particiona o array, de modo que elementos menores que o pivô fiquem antes e maiores depois.<br><b>Uso:</b> Muito eficiente e amplamente utilizado na prática.<br><b>Curiosidade:</b> Seu desempenho depende muito da escolha do pivô.',
   mergesort: '<b>Merge Sort</b>: também "divide para conquistar". Divide o array ao meio, ordena cada metade recursivamente e depois mescla as duas metades ordenadas.<br><b>Uso:</b> Ótimo para grandes volumes de dados e quando a estabilidade da ordenação é importante.<br><b>Curiosidade:</b> Garante o tempo de O(n*log n), mas requer memória extra.',
-  heapsort: '<b>Heap Sort</b>: constrói uma estrutura de heap (árvore binária) e extrai repetidamente o maior elemento, colocando-o no final do array.<br><b>Uso:</b> Muito eficiente em termos de complexidade O(n log n) e não requer memória extra.<br><b>Curiosidade:</b> É usado em sistemas embarcados onde a memória é limitada.'
+  heapsort: '<b>Heap Sort</b>: constrói uma estrutura de heap (árvore binária) e extrai repetidamente o maior elemento, colocando-o no final do array.<br><b>Uso:</b> Muito eficiente em termos de complexidade O(n log n) e não requer memória extra.<br><b>Curiosidade:</b> É usado em sistemas embarcados onde a memória é limitada.',
+  bucketsort: '<b>Bucket Sort</b>: distribui elementos em "baldes" (buckets), ordena cada bucket e depois os concatena.<br><b>Uso:</b> Bom para dados uniformemente distribuídos em um intervalo.<br><b>Curiosidade:</b> Em alguns cenários pode ter desempenho próximo a O(n).'
 };
 
 function updateAlgorithmSummary() {
@@ -334,6 +390,8 @@ sortBtn.addEventListener('click', async () => {
   else if (algorithm === 'quicksort') await quickSort();
   else if (algorithm === 'mergesort') await mergeSort();
   else if (algorithm === 'heapsort') await heapSort();
+  else if (algorithm === 'bucketsort') await bucketSort();
+
 
 
   sortBtn.disabled = false;

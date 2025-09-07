@@ -36,16 +36,91 @@ Aqui devem estar descritas as dependências do projeto (versões de linguagens e
 ```
    git clone [https://github.com/nateejpg/Trabalho-01-EDA-02-Busca-e-Ordenacao.git](https://github.com/nateejpg/Trabalho-01-EDA-02-Busca-e-Ordenacao.git)
 ```
+2. Execute o arquivo index.html da forma como você preferir. 
+   
 ## Capturas de tela
 Neste tópico você poderá observar as capturas de tela do funcionamento de cada algoritmo de ordenação do ponto de vista do usuário.  
- - As imagens devem ser salvas no repositório.
- - Imagens salvas em domínios eternos tendem a ficar indisponíveis e devem ser evitadas.   
+ 
+### Bubble Sort 
+
+<img src="./prints/bubbleSort/Captura de tela de 2025-09-06 16-20-32.png" alt="Minha imagem" width="300"/>
+<img src="./prints/bubbleSort/Captura de tela de 2025-09-06 16-20-59.png" alt="Minha imagem" width="300"/>
+<img src="./prints/bubbleSort/Captura de tela de 2025-09-06 16-21-12.png" alt="Minha imagem" width="300"/>
+
+### Heap Sort 
+
+<img src="./prints/heapSort/Captura de tela de 2025-09-06 16-57-57.png" alt="Minha imagem" width="300"/>
+<img src="./prints/heapSort/Captura de tela de 2025-09-06 16-58-12.png" alt="Minha imagem" width="300"/>
+<img src="./prints/heapSort/Captura de tela de 2025-09-06 16-58-20.png" alt="Minha imagem" width="300"/>
+<img src="./prints/heapSort/Captura de tela de 2025-09-06 17-02-49.png" alt="Minha imagem" width="300"/>
+
+### Insertion Sort 
+
+<img src="./prints/insertionSort/Captura de tela de 2025-09-06 16-48-19.png" alt="Minha imagem" width="300"/>
+<img src="./prints/insertionSort/Captura de tela de 2025-09-06 16-48-28.png" alt="Minha imagem" width="300"/>
+<img src="./prints/insertionSort/Captura de tela de 2025-09-06 16-48-35.png" alt="Minha imagem" width="300"/>
+<img src="./prints/insertionSort/Captura de tela de 2025-09-06 16-48-43.png" alt="Minha imagem" width="300"/>
+
+### Merge Sort 
+
+<img src="./prints/mergeSort/Captura de tela de 2025-09-06 16-55-34.png" alt="Minha imagem" width="300"/>
+<img src="./prints/mergeSort/Captura de tela de 2025-09-06 16-55-41.png" alt="Minha imagem" width="300"/>
+<img src="./prints/mergeSort/Captura de tela de 2025-09-06 16-55-50.png" alt="Minha imagem" width="300"/>
+
+### Quick Sort 
+
+<img src="./prints/quickSort/Captura de tela de 2025-09-06 16-52-52.png" alt="Minha imagem" width="300"/>
+<img src="./prints/quickSort/Captura de tela de 2025-09-06 16-53-00.png" alt="Minha imagem" width="300"/>
+<img src="./prints/quickSort/Captura de tela de 2025-09-06 16-53-10.png" alt="Minha imagem" width="300"/>
+
+### Selection Sort 
+
+<img src="./prints/selectionSort/Captura de tela de 2025-09-06 16-43-59.png" alt="Minha imagem" width="300"/>
+<img src="./prints/selectionSort/Captura de tela de 2025-09-06 16-44-08.png" alt="Minha imagem" width="300"/>
+<img src="./prints/selectionSort/Captura de tela de 2025-09-06 16-44-29.png" alt="Minha imagem" width="300"/>
+
+
+
+
+
+## Conclusões
+
+Cada um dos algoritmos de ordenação apresentados nesse trabalho tem seus prós e contras. Agora eu vou citar as utilidades e vulnerabilidades de cada um dos algoritmos usados nessa aplicação: 
 
 ### Bubble Sort 
 
-<img src="./CAPTURAS_DE_TELA_TRABALHO1_EDA2/Captura1.png" alt="Minha imagem" width="300"/>
+- Vantagens: Para começar o bubble sort é um algoritmo estável, ou seja, ele mantém a ordem relativa elementos iguais. E se os dados já estiverem quase ordenados, o bubble sort otimizado com a flag de troca pode terminar cedo, aproximando-se de O(n). 
 
-## Conclusões
-Aqui você diz se o algoritmo utilizado foi útil, se tem limitações, etc.
-## Referências
-Caso tenha utilizado algum agoritmo como base, citar o mesmo devidamente para  evitar quaisquer denuncias de plágio.
+- Desvantagens: O bubble sort é pouco eficiente, com complexidade O(n²) para o pior caso e o médio caso, o que o torna extremamente lento para listas grandes comparado a outros algoritmos. Outra desvantagem é que mesmo que a lista já esteja quase ordenada, sem a otimização da flag, ele ainda percorre toda a lista várias vezes. 
+  
+### Heap Sort 
+
+- Vantagens: O heap sort possui complexidade garantida, ele sempre executa em O(n log n) no pior, médio e melhor caso, diferente do quick sort que pode cair para O(n²) em certos casos. Ele também é mais econômico em memória que o merge sort, e a sua estrutura garante eficiência mesmo em listas muito grandes. 
+  
+- Desvantagens: Para começar o heap sort não é estável. Ele também realiza muitas trocas em posições distantes do array, isso causa menos eficiência no uso da memória cache do processador, deixando-o mais lento em arquiteturas modernas. 
+
+### Insertion Sort 
+
+- Vantagens: O insertion Sort é estável e para entradas de tamanho reduzido pode ser melhor que algoritmos complexos devido ao baixo overhead. Além disso se os dados já estiverem quase ordenados ele pode se aproximar da complexidade O(n). 
+  
+- Desvantagens: Ele possui alta complexidade em listas grandes e mesmo no caso médio ele continua sendo O(n²). Além disso, ao inserir um elemento na posição correta, ele pode deslocar vários outros elementos, o que consome tempo. 
+
+### Merge Sort 
+
+- Vantagens: O merge sort é um dos algoritmos mais usados na teoria e na prática. Ele possui complexidade garantida, sempre executa em O(n log n), independentes da distribuição dos dados. Estável, ou seja sempre mantém a ordem relativa entre elementos iguais. Ele pode ser implementado em um merge sort externo, o que permite a ele ordenar arquivos muito grandes que não cabem na memória RAM. Ele também possui um estrutura recursiva clara e elegante, que facilita o racícinio e depuração. 
+  
+- Desvantagens: Ele precisa de O(n) espaço adicional para armazenar arrays auxiliares durante o processo de mesclagem, isso o torna menos adequado para ambientes com memória limitada. O overhead da recursão e das cópias de arrays faz com que seja mais lento que algoritmos simples como insertion sort em entradas pequenas. 
+  
+### Quick Sort 
+
+- Vantagens: Apesar do pior caso ser O(n²), com boas escolhas de pivô o  desempenho médio é O(n log n) e geralmente é mais rápido que o merge sort e o heap sort. Ele também precisa de pouca memória extra e trabalha diretamente dentro do array, com acessos locais, aproveitando melhor a memória cache da cpu do que o merge sort. 
+  
+- Desvantagens: Se o pivô for mal escolhido o desempenho degrada drasticamente. Não é estável. Em implementações recursivas, pode haver estouro de pilha em listas muito grandes se não houver otimização. Precisa de estratégias como mediana de três, pivô aleatório ou híbridos para manter o desempenho bom o em diferentes distribuições de dados. 
+
+### Selection Sort 
+
+- Vantagens: Ele é simples para implementar, efetua um número mínimo de trocas e faz ordenação in-place então ele não precisa de memória extra significativa. 
+
+- Desvantagens: É pouco eficiente em grandes listas por ser quadrático em todos os casos. Não é estável. Não aproveita listas parcialmente ordenadas e faz um número excessivo de comparações embora efetue poucas trocas. 
+  
+
