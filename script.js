@@ -357,6 +357,89 @@ async function bucketSort(bucketSize = 5) {
 }
 
 
+async function shellSort() {
+    const n = array.length;
+    let gap = Math.floor(n / 2);
+    const sortedIndices = [];
+
+    while (gap > 0) {
+        for (let i = gap; i < n; i++) {
+            let temp = array[i];
+            let j = i;
+
+            updateStatus(`Inserindo ${temp} no subarray com gap ${gap}`);
+            renderArray([i], [], sortedIndices);
+            await sleep(350);
+
+            while (j >= gap && array[j - gap] > temp) {
+                updateStatus(`Movendo ${array[j - gap]} para a posição ${j}`);
+                array[j] = array[j - gap];
+                renderArray([j], [j - gap], sortedIndices);
+                await sleep(350);
+                j -= gap;
+            }
+
+            array[j] = temp;
+            renderArray([j], [], sortedIndices);
+            await sleep(350);
+        }
+        gap = Math.floor(gap / 2);
+    }
+
+    renderArray([], [], [...Array(n).keys()]);
+    updateStatus('Array Ordenado!');
+}
+
+async function countingSort() {
+    if (array.length === 0) return array;
+
+    const n = array.length;
+    const maxValue = Math.max(...array);
+    const minValue = Math.min(...array);
+    const range = maxValue - minValue + 1;
+
+    let count = new Array(range).fill(0);
+    let output = new Array(n);
+
+    updateStatus(`Contando a frequência de cada elemento...`);
+    await sleep(600);
+
+    // Contar a frequência de cada elemento
+    for (let i = 0; i < n; i++) {
+        count[array[i] - minValue]++;
+        renderArray([i]); // destaca o elemento sendo contado
+        await sleep(300);
+    }
+
+    // Acumular os valores
+    for (let i = 1; i < count.length; i++) {
+        count[i] += count[i - 1];
+    }
+
+    updateStatus(`Construindo o array ordenado...`);
+    await sleep(600);
+
+    // Construir o array ordenado
+    for (let i = n - 1; i >= 0; i--) {
+        const value = array[i];
+        output[count[value - minValue] - 1] = value;
+        count[value - minValue]--;
+        renderArray([], [i]); // destaca o elemento sendo colocado
+        await sleep(300);
+    }
+
+    // Copiar de volta para o array original
+    for (let i = 0; i < n; i++) {
+        array[i] = output[i];
+        renderArray([], [i]);
+        await sleep(200);
+    }
+
+    renderArray([], [], [...Array(n).keys()]);
+    updateStatus('Array Ordenado!');
+}
+
+
 
 const algorithmSummaries = {
   bubble: '<b>Bubble Sort</b>: compara pares de elementos adjacentes e os troca se estiverem na ordem errada. O processo se repete até que o array esteja ordenado.<br><b>Uso:</b> Didático, para ensino e listas pequenas.<br><b>Curiosidade:</b> É um dos algoritmos mais simples, mas raramente usado na prática devido à sua baixa eficiência.',
@@ -365,7 +448,11 @@ const algorithmSummaries = {
   quicksort: '<b>Quick Sort</b>: usa a estratégia de "dividir para conquistar". Escolhe um elemento como pivô e particiona o array, de modo que elementos menores que o pivô fiquem antes e maiores depois.<br><b>Uso:</b> Muito eficiente e amplamente utilizado na prática.<br><b>Curiosidade:</b> Seu desempenho depende muito da escolha do pivô.',
   mergesort: '<b>Merge Sort</b>: também "divide para conquistar". Divide o array ao meio, ordena cada metade recursivamente e depois mescla as duas metades ordenadas.<br><b>Uso:</b> Ótimo para grandes volumes de dados e quando a estabilidade da ordenação é importante.<br><b>Curiosidade:</b> Garante o tempo de O(n*log n), mas requer memória extra.',
   heapsort: '<b>Heap Sort</b>: constrói uma estrutura de heap (árvore binária) e extrai repetidamente o maior elemento, colocando-o no final do array.<br><b>Uso:</b> Muito eficiente em termos de complexidade O(n log n) e não requer memória extra.<br><b>Curiosidade:</b> É usado em sistemas embarcados onde a memória é limitada.',
-  bucketsort: '<b>Bucket Sort</b>: distribui elementos em "baldes" (buckets), ordena cada bucket e depois os concatena.<br><b>Uso:</b> Bom para dados uniformemente distribuídos em um intervalo.<br><b>Curiosidade:</b> Em alguns cenários pode ter desempenho próximo a O(n).'
+  bucketsort: '<b>Bucket Sort</b>: distribui elementos em "baldes" (buckets), ordena cada bucket e depois os concatena.<br><b>Uso:</b> Bom para dados uniformemente distribuídos em um intervalo.<br><b>Curiosidade:</b> Em alguns cenários pode ter desempenho próximo a O(n).',
+  shellsort: '<b>Shell Sort</b>: melhora o Insertion Sort usando incrementos (gaps) para comparar elementos distantes, reduzindo deslocamentos.<br><b>Uso:</b> Listas médias e grandes.<br><b>Curiosidade:</b> Desempenho depende da sequência de gaps escolhida.', 
+  countingsort: '<b>Counting Sort</b>: conta a frequência de cada elemento em um array de inteiros, depois reconstrói o array ordenado.<br><b>Uso:</b> Inteiros em intervalos limitados.<br><b>Curiosidade:</b> Não usa comparações e é estável, podendo ser muito rápido para certos casos.'
+  
+
 };
 
 function updateAlgorithmSummary() {
@@ -391,6 +478,10 @@ sortBtn.addEventListener('click', async () => {
   else if (algorithm === 'mergesort') await mergeSort();
   else if (algorithm === 'heapsort') await heapSort();
   else if (algorithm === 'bucketsort') await bucketSort();
+  else if (algorithm === 'shellsort') await shellSort();
+  else if (algorithm === 'countingsort') await countingSort();
+
+
 
 
 

@@ -15,6 +15,11 @@ Os algoritmos de ordenação específicos que foram implementados nesse projeto 
  - Quick Sort (O(n log n))
  - Merge Sort (O(n log n))
  - Heap Sort (O(n log n)) 
+ - Bucket Sort (O(n+k)) 
+ - Shell Sort (O(n)) 
+ - Counting Sort (O(n+k))
+  
+
 
   
  
@@ -79,6 +84,27 @@ Neste tópico você poderá observar as capturas de tela do funcionamento de cad
 <img src="./prints/selectionSort/Captura de tela de 2025-09-06 16-44-08.png" alt="Minha imagem" width="300"/>
 <img src="./prints/selectionSort/Captura de tela de 2025-09-06 16-44-29.png" alt="Minha imagem" width="300"/>
 
+### Bucket Sort 
+
+<img src="./prints/bucketSort/Captura de tela de 2025-09-07 02-26-54.png" alt="Minha imagem" width="300"/>
+<img src="./prints/bucketSort/Captura de tela de 2025-09-07 02-27-00.png" alt="Minha imagem" width="300"/>
+<img src="./prints/bucketSort/Captura de tela de 2025-09-07 02-27-07.png" alt="Minha imagem" width="300"/>
+
+### Shell Sort 
+
+<img src="./prints/shellSort/Captura de tela de 2025-09-07 03-00-34.png" alt="Minha imagem" width="300"/>
+<img src="./prints/shellSort/Captura de tela de 2025-09-07 03-01-05.png" alt="Minha imagem" width="300"/>
+<img src="./prints/shellSort/Captura de tela de 2025-09-07 03-01-13.png" alt="Minha imagem" width="300"/>
+<img src="./prints/shellSort/Captura de tela de 2025-09-07 03-01-25.png" alt="Minha imagem" width="300"/>
+
+### Counting Sort 
+
+<img src="./prints/countingSort/Captura de tela de 2025-09-07 03-27-09.png" alt="Minha imagem" width="300"/>
+<img src="./prints/countingSort/Captura de tela de 2025-09-07 03-27-29.png" alt="Minha imagem" width="300"/>
+<img src="./prints/countingSort/Captura de tela de 2025-09-07 03-29-21.png" alt="Minha imagem" width="300"/>
+<img src="./prints/countingSort/Captura de tela de 2025-09-07 03-29-29.png" alt="Minha imagem" width="300"/>
+
+
 
 
 
@@ -123,4 +149,22 @@ Cada um dos algoritmos de ordenação apresentados nesse trabalho tem seus prós
 
 - Desvantagens: É pouco eficiente em grandes listas por ser quadrático em todos os casos. Não é estável. Não aproveita listas parcialmente ordenadas e faz um número excessivo de comparações embora efetue poucas trocas. 
   
+### Bucket Sort 
+
+- Vantagens: Ele pode ser muito rápido em casos ideais, com dados uniformemente distribuídos, nos quais sua compelexidade chega próximo de O(n). Ele é estável e também pode usar qualquer algoritmo de ordenação dentro dos buckets, permitindo otimizações específicas. 
+
+- Desvantagens: Ele não é in-place, o que significa que ele precisa de espaço O(n+k) para os buckets. Se muitos elementos caírem no mesmo bucket o algoritmo degenera podendo chegar a O(n²). Exige planejamento do número de buckets e escolha de um algoritmo interno de ordenação. 
+  
+### Shell Sort 
+
+- Vantagens: Mais rápido que o insertion sort, pois movimenta elementos distantes reduzindo deslocamentos e comparações. Ele é in-place, o que significa que ele não precisa de memória extra significativa. Ele é flexível, pois pode usar diferentes formas de gap, permitindo otimizações. 
+  
+- Desvantagens: Não é estável. O desempenho ótimo depende da escolha da sequência de incrementos. Ele é mais complexo do que outros algoritmos, de modo que sua implementação exige mais cuidado. A complexidade exata depende da sequência de gaps, de modo que não existe uma fórmula universal. 
+
+### Counting Sort 
+
+- Vantagens: Ele é muito rápido para inteiros dentro de um intervalo limitado, pode atingir complexidade O(n+k), sendo extremamente eficiente quando k não é muito maior que n. É estável. Não usa comparações, ao invés disso baseia-se em contagem de ocorrências, não em comparações entre elementos. 
+
+- Desvantagens: Depende demais do intervalo de valores, de modo que se os elementos forem grandes demais ou muito dispersos, o array de contagem pode consumir muita memória. não funciona para valores não inteiros. Não é in-place. 
+
 
